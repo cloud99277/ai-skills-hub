@@ -1,3 +1,5 @@
+[English](README.md) | [简体中文](README_CN.md)
+
 # AI Skills Hub
 
 **一个仓库，所有 AI agent，共享技能。**

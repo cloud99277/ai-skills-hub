@@ -1,3 +1,5 @@
+[English](README.md) | [简体中文](README_CN.md)
+
 # AI Skills Hub
 
 **One repository. Every AI agent. Shared skills.**
