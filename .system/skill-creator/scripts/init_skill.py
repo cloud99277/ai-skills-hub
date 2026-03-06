@@ -14,6 +14,7 @@ Examples:
 """
 
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -255,6 +256,66 @@ def create_resource_dirs(skill_dir, skill_name, skill_title, resources, include_
                 print("[OK] Created assets/")
 
 
+AGENT_SYMLINK_DIRS = [
+    Path.home() / ".claude" / "skills",
+    Path.home() / ".codex" / "skills",
+    Path.home() / ".gemini" / "skills",
+    Path.home() / ".agents" / "skills",
+]
+
+
+def check_agent_symlinks():
+    """Check agent entry-point symlinks and auto-repair if broken."""
+    centralized_root = Path.home() / ".ai-skills"
+    if not centralized_root.exists():
+        return
+
+    try:
+        expected_target = centralized_root.resolve()
+    except OSError:
+        return
+
+    all_ok = True
+    for agent_dir in AGENT_SYMLINK_DIRS:
+        label = str(agent_dir).replace(str(Path.home()), "~")
+
+        if agent_dir.is_symlink():
+            try:
+                actual_target = agent_dir.resolve()
+            except OSError:
+                actual_target = None
+            if actual_target == expected_target:
+                continue  # healthy
+            # Broken or wrong target — remove and recreate
+            print(f"  [FIX] {label} was a bad symlink, relinking...")
+            agent_dir.unlink()
+        elif agent_dir.is_dir():
+            # Real directory — back it up first
+            import shutil
+            from datetime import datetime
+            backup = agent_dir.parent / f"{agent_dir.name}.backup.{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            print(f"  [FIX] {label} was a real directory, backing up to {backup.name} and relinking...")
+            shutil.move(str(agent_dir), str(backup))
+        elif not agent_dir.exists():
+            print(f"  [FIX] {label} did not exist, creating symlink...")
+        else:
+            print(f"  [WARN] {label} exists but is not a directory or symlink, skipping")
+            all_ok = False
+            continue
+
+        # Create parent if needed and make the symlink
+        try:
+            agent_dir.parent.mkdir(parents=True, exist_ok=True)
+            agent_dir.symlink_to(centralized_root)
+            print(f"  [OK]  {label} -> {centralized_root}")
+        except OSError as exc:
+            print(f"  [WARN] Failed to create symlink {label}: {exc}")
+            all_ok = False
+
+    if all_ok:
+        print("  [OK] All agent symlinks are healthy")
+
+
 def init_skill(skill_name, path, resources, include_examples, interface_overrides):
     """
     Initialize a new skill directory with template SKILL.md.
@@ -336,6 +397,8 @@ def init_skill(skill_name, path, resources, include_examples, interface_override
         print(f"6. Run: python3 {Path(__file__).resolve().parent / 'lint_skills.py'} {centralized_root}")
         print(f"   Or use the shared 'skill-lint' skill for the same repo-wide checks")
         print("7. Trigger the skill once in a real CLI workflow to confirm it is routable and usable")
+        print("\nAgent symlink health check:")
+        check_agent_symlinks()
     else:
         print("6. If this skill should become shared infrastructure, move it into ~/.ai-skills and then run the repo-wide linter")
 
