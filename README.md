@@ -1,12 +1,26 @@
 [English](README.md) | [简体中文](README_CN.md)
 
-# AI Skills Hub
+<div align="center">
+
+# 🧠 AI Skills Hub
 
 **One repository. Every AI agent. Shared skills.**
 
-AI Skills Hub is a centralized skill system that lets multiple AI agents (Claude, Codex, Gemini, and more) share the same set of skills through a single repository. Create a skill once, and every linked agent can use it immediately.
+[![Author](https://img.shields.io/badge/Author-Cloud927-blue?style=flat-square)](https://github.com/cloud99277)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![Skills](https://img.shields.io/badge/Skills-2+-brightgreen?style=flat-square)](#-built-in-skills)
 
-## Why
+</div>
+
+## ✨ Features
+
+- 🔗 **One Place, All Agents** — Claude, Codex, Gemini share skills through symlinks to a single repository
+- 🛠️ **Complete Toolchain** — Create, validate, lint, and generate skills with built-in tools
+- 📐 **Progressive Disclosure** — Metadata → Body → Resources, three-level loading to save context window
+- 🔌 **Plug & Play** — New AI tool? One `ln -s` command and it's connected
+- 📦 **Examples Included** — From hello-world to full skills with scripts, ready to learn from
+
+## 🤔 Why?
 
 If you use multiple AI coding assistants, you've probably noticed the problem: each tool has its own isolated skill/knowledge system. You end up duplicating skills, maintaining them separately, and dealing with inconsistencies.
 
@@ -21,7 +35,7 @@ AI Skills Hub solves this with a simple architecture:
 
 All agent entry points are symlinks to one centralized repository. **Update once, all agents benefit.**
 
-## Quick Start
+## 🚀 Quick Start
 
 ### 1. Clone
 
@@ -61,7 +75,7 @@ python3 ~/.ai-skills/.system/skill-creator/scripts/quick_validate.py ~/.ai-skill
 python3 ~/.ai-skills/.system/skill-creator/scripts/lint_skills.py ~/.ai-skills
 ```
 
-## What's a Skill?
+## 📖 What's a Skill?
 
 A skill is a self-contained directory with a `SKILL.md` file that gives an AI agent specialized knowledge, workflows, or tools for a specific domain.
 
@@ -90,7 +104,14 @@ description: Converts PDF documents to clean Markdown text. Use when the user wa
 
 A good description answers: **What does it do? When should it trigger? What should it NOT handle?**
 
-## Repository Structure
+## 📦 Built-in Skills
+
+| Skill | Description |
+|-------|-------------|
+| [927-translate-skill](927-translate-skill/) | 🌐 Universal translation skill — web/tweet fetching, 3 modes, CJK europeanization detection |
+| [skill-lint](skill-lint/) | 🔍 Repository-wide skill quality linting |
+
+## 🏗️ Repository Structure
 
 ```
 ai-skills-hub/
@@ -98,8 +119,8 @@ ai-skills-hub/
 │   └── skill-creator/
 │       ├── SKILL.md            ← Design principles and creation guide
 │       └── scripts/            ← init, validate, lint, generate tools
-├── skill-lint/                 ← Built-in repository linting skill
 ├── 927-translate-skill/        ← Universal translation skill (all agents)
+├── skill-lint/                 ← Built-in repository linting skill
 ├── _examples/                  ← Example skills to learn from
 │   ├── hello-world/            ← Minimal skill (just SKILL.md)
 │   └── with-scripts/           ← Skill with bundled scripts
@@ -107,11 +128,10 @@ ai-skills-hub/
 │   ├── ARCHITECTURE.md         ← System design and concepts
 │   └── CONVENTIONS.md          ← Naming, frontmatter, routing standards
 ├── setup.sh                    ← One-click installation
-├── uninstall.sh                ← Clean removal
-└── your-skills-here/           ← Add your own skills!
+└── uninstall.sh                ← Clean removal
 ```
 
-## Toolchain
+## 🛠️ Toolchain
 
 | Tool | Scope | Purpose |
 |------|-------|---------|
@@ -121,7 +141,7 @@ ai-skills-hub/
 | `generate_openai_yaml.py` | Single skill | Generate UI metadata |
 | `skill-lint` (skill) | Full repo | Same as lint_skills.py, as a reusable skill |
 
-## Adding a New Agent
+## 🔌 Adding a New Agent
 
 If a new AI tool stores skills at `~/.newtool/skills/`, just add a symlink:
 
@@ -131,7 +151,7 @@ ln -s ~/.ai-skills ~/.newtool/skills
 
 Done. The new tool instantly has access to all shared skills.
 
-## Key Concepts
+## 🏗️ Core Design
 
 ### Progressive Disclosure
 
@@ -151,12 +171,12 @@ When multiple skills could match:
 4. Newer version > legacy
 5. Generic only as fallback
 
-## Documentation
+## 📚 Documentation
 
 - [Architecture](docs/ARCHITECTURE.md) — System design, progressive disclosure, validation pipeline
 - [Conventions](docs/CONVENTIONS.md) — Naming, frontmatter, routing, lifecycle, governance
 
-## Uninstall
+## 🗑️ Uninstall
 
 ```bash
 chmod +x uninstall.sh
@@ -165,6 +185,14 @@ chmod +x uninstall.sh
 
 This removes symlinks only. Your skills and the repository itself are not deleted.
 
-## License
+## 📄 License
 
 [MIT](LICENSE)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by [Cloud927](https://github.com/cloud99277)**
+
+</div>
