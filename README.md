@@ -99,6 +99,7 @@ ai-skills-hub/
 │       ├── SKILL.md            ← Design principles and creation guide
 │       └── scripts/            ← init, validate, lint, generate tools
 ├── skill-lint/                 ← Built-in repository linting skill
+├── 927-translate-skill/        ← Universal translation skill (all agents)
 ├── _examples/                  ← Example skills to learn from
 │   ├── hello-world/            ← Minimal skill (just SKILL.md)
 │   └── with-scripts/           ← Skill with bundled scripts

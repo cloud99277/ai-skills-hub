@@ -99,6 +99,7 @@ ai-skills-hub/
 │       ├── SKILL.md            ← 设计原则和创建指南
 │       └── scripts/            ← 初始化、校验、巡检、生成工具
 ├── skill-lint/                 ← 内置的仓库巡检 skill
+├── 927-translate-skill/        ← 通用翻译技能（支持所有 Agent）
 ├── _examples/                  ← 示例 skill，供学习参考
 │   ├── hello-world/            ← 最简 skill（仅 SKILL.md）
 │   └── with-scripts/           ← 带脚本的 skill
