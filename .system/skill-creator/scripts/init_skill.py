@@ -259,7 +259,8 @@ def create_resource_dirs(skill_dir, skill_name, skill_title, resources, include_
 AGENT_SYMLINK_DIRS = [
     Path.home() / ".claude" / "skills",
     Path.home() / ".codex" / "skills",
-    Path.home() / ".gemini" / "skills",
+    # Note: ~/.gemini/skills is intentionally excluded.
+    # Gemini CLI also scans ~/.agents/skills, so having both causes duplicate skill conflicts.
     Path.home() / ".agents" / "skills",
 ]
 

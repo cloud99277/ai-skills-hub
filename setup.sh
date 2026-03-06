@@ -15,10 +15,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AI_SKILLS_HOME="$HOME/.ai-skills"
 
 # Agent entry points that should symlink to the centralized repo
+# Note: ~/.gemini/skills is intentionally excluded because Gemini CLI
+# also scans ~/.agents/skills — having both causes duplicate skill conflicts.
 AGENT_DIRS=(
     "$HOME/.claude/skills"
     "$HOME/.codex/skills"
-    "$HOME/.gemini/skills"
     "$HOME/.agents/skills"
 )
 
