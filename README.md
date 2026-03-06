@@ -24,7 +24,7 @@ All agent entry points are symlinks to one centralized repository. **Update once
 ### 1. Clone
 
 ```bash
-git clone https://github.com/Cloud927/ai-skills-hub.git
+git clone https://github.com/cloud99277/ai-skills-hub.git
 cd ai-skills-hub
 ```
 

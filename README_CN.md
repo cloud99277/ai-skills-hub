@@ -24,7 +24,7 @@ AI Skills Hub 用一个简单的架构解决了这个问题：
 ### 1. 克隆
 
 ```bash
-git clone https://github.com/Cloud927/ai-skills-hub.git
+git clone https://github.com/cloud99277/ai-skills-hub.git
 cd ai-skills-hub
 ```
 
