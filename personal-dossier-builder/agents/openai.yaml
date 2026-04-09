@@ -1,0 +1,4 @@
+interface:
+  display_name: "Personal Dossier"
+  short_description: "Build and maintain a living personal dossier"
+  default_prompt: "Use $personal-dossier-builder to scan my personal notes, identify the highest-value open items, and update the dossier plus confirmed summary."

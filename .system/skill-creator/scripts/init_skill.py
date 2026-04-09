@@ -14,7 +14,6 @@ Examples:
 """
 
 import argparse
-import os
 import re
 import sys
 from pathlib import Path
@@ -256,67 +255,6 @@ def create_resource_dirs(skill_dir, skill_name, skill_title, resources, include_
                 print("[OK] Created assets/")
 
 
-AGENT_SYMLINK_DIRS = [
-    Path.home() / ".claude" / "skills",
-    Path.home() / ".codex" / "skills",
-    # Note: ~/.gemini/skills is intentionally excluded.
-    # Gemini CLI also scans ~/.agents/skills, so having both causes duplicate skill conflicts.
-    Path.home() / ".agents" / "skills",
-]
-
-
-def check_agent_symlinks():
-    """Check agent entry-point symlinks and auto-repair if broken."""
-    centralized_root = Path.home() / ".ai-skills"
-    if not centralized_root.exists():
-        return
-
-    try:
-        expected_target = centralized_root.resolve()
-    except OSError:
-        return
-
-    all_ok = True
-    for agent_dir in AGENT_SYMLINK_DIRS:
-        label = str(agent_dir).replace(str(Path.home()), "~")
-
-        if agent_dir.is_symlink():
-            try:
-                actual_target = agent_dir.resolve()
-            except OSError:
-                actual_target = None
-            if actual_target == expected_target:
-                continue  # healthy
-            # Broken or wrong target — remove and recreate
-            print(f"  [FIX] {label} was a bad symlink, relinking...")
-            agent_dir.unlink()
-        elif agent_dir.is_dir():
-            # Real directory — back it up first
-            import shutil
-            from datetime import datetime
-            backup = agent_dir.parent / f"{agent_dir.name}.backup.{datetime.now().strftime('%Y%m%d%H%M%S')}"
-            print(f"  [FIX] {label} was a real directory, backing up to {backup.name} and relinking...")
-            shutil.move(str(agent_dir), str(backup))
-        elif not agent_dir.exists():
-            print(f"  [FIX] {label} did not exist, creating symlink...")
-        else:
-            print(f"  [WARN] {label} exists but is not a directory or symlink, skipping")
-            all_ok = False
-            continue
-
-        # Create parent if needed and make the symlink
-        try:
-            agent_dir.parent.mkdir(parents=True, exist_ok=True)
-            agent_dir.symlink_to(centralized_root)
-            print(f"  [OK]  {label} -> {centralized_root}")
-        except OSError as exc:
-            print(f"  [WARN] Failed to create symlink {label}: {exc}")
-            all_ok = False
-
-    if all_ok:
-        print("  [OK] All agent symlinks are healthy")
-
-
 def init_skill(skill_name, path, resources, include_examples, interface_overrides):
     """
     Initialize a new skill directory with template SKILL.md.
@@ -377,31 +315,20 @@ def init_skill(skill_name, path, resources, include_examples, interface_override
 
     # Print next steps
     print(f"\n[OK] Skill '{skill_name}' initialized successfully at {skill_dir}")
-    centralized_root = Path.home() / ".ai-skills"
-    is_centralized = centralized_root in skill_dir.parents or skill_dir == centralized_root
     print("\nNext steps:")
-    if is_centralized:
-        print("1. This skill is in the centralized shared repository and can be used by all linked agents once finalized")
-    else:
-        print("1. Decide whether this skill should stay private/experimental or move into ~/.ai-skills for shared use")
-    print("2. Edit SKILL.md to complete the TODO items and update the description")
+    print("1. Edit SKILL.md to complete the TODO items and update the description")
     if resources:
         if include_examples:
-            print("3. Customize or delete the example files in scripts/, references/, and assets/")
+            print("2. Customize or delete the example files in scripts/, references/, and assets/")
         else:
-            print("3. Add resources to scripts/, references/, and assets/ as needed")
+            print("2. Add resources to scripts/, references/, and assets/ as needed")
     else:
-        print("3. Create resource directories only if needed (scripts/, references/, assets/)")
-    print("4. Update agents/openai.yaml if the UI metadata should differ")
-    print(f"5. Run: python3 {Path(__file__).resolve().parent / 'quick_validate.py'} {skill_dir}")
-    if is_centralized:
-        print(f"6. Run: python3 {Path(__file__).resolve().parent / 'lint_skills.py'} {centralized_root}")
-        print(f"   Or use the shared 'skill-lint' skill for the same repo-wide checks")
-        print("7. Trigger the skill once in a real CLI workflow to confirm it is routable and usable")
-        print("\nAgent symlink health check:")
-        check_agent_symlinks()
-    else:
-        print("6. If this skill should become shared infrastructure, move it into ~/.ai-skills and then run the repo-wide linter")
+        print("2. Create resource directories only if needed (scripts/, references/, assets/)")
+    print("3. Update agents/openai.yaml if the UI metadata should differ")
+    print("4. Run the validator when ready to check the skill structure")
+    print(
+        "5. Forward-test complex skills with realistic user requests to ensure they work as intended"
+    )
 
     return skill_dir
 

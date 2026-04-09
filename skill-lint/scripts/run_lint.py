@@ -12,9 +12,12 @@ from pathlib import Path
 
 def main() -> int:
     script_path = Path(__file__).resolve()
-    skill_dir = script_path.parents[1]
-    repo_root = skill_dir.parent
-    lint_script = repo_root / ".system" / "skill-creator" / "scripts" / "lint_skills.py"
+    scripts_dir = script_path.parent
+    lint_script = scripts_dir / "lint_skills.py"
+    if not lint_script.exists():
+        skill_dir = scripts_dir.parent
+        repo_root = skill_dir.parent
+        lint_script = repo_root / ".system" / "skill-creator" / "scripts" / "lint_skills.py"
 
     if not lint_script.exists():
         print(f"[ERROR] lint_skills.py not found: {lint_script}", file=sys.stderr)

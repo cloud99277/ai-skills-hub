@@ -1,0 +1,3 @@
+interface:
+  display_name: "PPT Template"
+  short_description: "Generate editable PPTX skeletons from a visual style"

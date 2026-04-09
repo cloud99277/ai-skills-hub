@@ -1,4 +1,5 @@
 __pycache__/
+x-thread.md
 *.pyc
 *.pyo
 .omc/

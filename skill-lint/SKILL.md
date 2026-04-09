@@ -1,6 +1,16 @@
 ---
 name: skill-lint
 description: Repository-wide lint workflow for skill frontmatter, description routing quality, and high-risk body inconsistencies. Use when the user wants to lint a shared skills repository, enforce skill metadata conventions, or review skills after a bulk refactor or cleanup.
+io:
+  input:
+    - type: directory
+      description: Skills 仓库根目录路径
+      required: false
+  output:
+    - type: json_data
+      description: Lint 检查报告（包含 OK/WARN/ERROR 状态）
+    - type: text
+      description: 人类可读的 lint 结果摘要
 ---
 
 # Skill Lint
